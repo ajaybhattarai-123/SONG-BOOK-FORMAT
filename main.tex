@@ -1,0 +1,546 @@
+\documentclass[24pt, a4paper, oneside]{book} % oneside prevents different inner/outer margins
+
+% ------------------- Packages -------------------
+\usepackage[utf8]{inputenc} % UTF-8 input encoding
+\usepackage{fontspec} % For Nepali fonts
+\setmainfont{Noto Serif Devanagari} % Change Here: Any installed Nepali font
+\usepackage{geometry} % Page layout
+\usepackage{fancyhdr} % Header & Footer
+\usepackage{setspace} % Line spacing
+\usepackage{tocloft}  % Table of Contents customization
+\usepackage{titlesec} % Section styling
+\usepackage{graphicx} % For images
+\usepackage{xstring}  % For string substitution
+\usepackage{fmtcount} % For devanagari numerals
+\usepackage[percent]{overpic} % Overpic with percent option
+\usepackage{multicol} % Multiple columns
+\usepackage{tikz} % TikZ graphics
+\usepackage{ragged2e} % Text alignment options
+\usepackage{microtype} % Better typography
+\usepackage{etoolbox} % Programming tools
+\usepackage{afterpage} % Delayed page commands
+\usepackage{lipsum} % Dummy text
+\usepackage{xcolor} % Colors
+\usetikzlibrary{calc} % TikZ calculations
+
+% ------------------- Page Layout -------------------
+\geometry{
+  top=1.5cm,
+  bottom=2cm,
+  left=2cm,
+  right=2cm
+}
+\setstretch{1.7} % Comfortable line spacing
+
+% ------------------- Front Cover -------------------
+% ------------- Full A4 Front Cover (No Margin, No Shift) -------------
+\newpage
+\thispagestyle{empty}
+\begin{picture}(0,0)
+  \put(-75,-790){\includegraphics[width=\paperwidth,height=\paperheight]{FRONT-PAGE.jpg}}
+\end{picture}
+\newpage
+
+% ------------------- Devanagari Section Numbering -------------------
+\renewcommand{\thesection}{\devanagaridigits{\arabic{section}}}
+
+% ------------------- Table of Contents Depth -------------------
+\setcounter{tocdepth}{1} % Only sections in TOC, no subsections
+
+% ------------------- Custom Song Title for Footer -------------------
+\newcommand{\songtitle}{}
+
+% ------------------- Header & Footer -------------------
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[L]{\textit{\fontsize{15pt}{15pt}\selectfont\fontspec{Noto Serif Devanagari}\songtitle}}
+\fancyfoot[R]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+% ------------------- Section (Song Title) Formatting with Horizontal Line -------------------
+\titlespacing*{\section}{0pt}{0pt}{0.3em}  % adjust last value to control space below section title
+
+\titleformat{\section}[block]
+  {\fontsize{28pt}{20pt}\selectfont\bfseries\centering}{}{0em}{}
+  [
+  \noindent\rule{\textwidth}{2pt}
+  ]
+
+% ------------------- Song Content Styling -------------------
+\newenvironment{songtextblock}{
+  \setstretch{1.5}
+  \fontsize{20pt}{20pt}\selectfont
+  \bfseries
+}{}
+
+
+
+\newenvironment{songtextblock}{
+  \setstretch{1.5}
+  \fontsize{20pt}{20pt}\selectfont
+  \bfseries
+}{}
+% Custom justified line environment
+\usepackage{expl3,xparse}
+
+\ExplSyntaxOn
+
+% Create an environment that splits at line breaks and auto-stretches
+\NewDocumentEnvironment{justifylines}{+b}
+ {
+  \begin{songtextblock}
+  \seq_set_split:Nnn \l_tmpa_seq { \\ } { #1 }
+  \seq_map_inline:Nn \l_tmpa_seq
+   {
+     \makebox[\linewidth][s]{##1}\\
+   }
+ }
+ {
+  \end{songtextblock}
+ }
+\ExplSyntaxOff
+
+
+
+
+% ---------- Dots in Table of Contents ----------
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+
+% ---------- Make TOC Entries Bold ----------
+\renewcommand{\cftsecfont}{\Large\bfseries}        % Section title bold
+\renewcommand{\cftsubsecfont}{\bfseries}     % Subsection title bold
+\renewcommand{\cftsubsubsecfont}{\bfseries}  % Subsubsection title bold
+
+\renewcommand{\cftsecpagefont}{\bfseries}        % Section page number bold
+\renewcommand{\cftsubsecpagefont}{\bfseries}     % Subsection page number bold
+\renewcommand{\cftsubsubsecpagefont}{\bfseries}  % Subsubsection page number bold
+
+% ---------- Beautiful TOC Title ----------
+
+\renewcommand{\contentsname}{\Huge\centering\bfseries\underline{विषय सूची}\\[1mm]}
+
+% ---------- Reduce Top Space Before TOC ----------
+\makeatletter
+\patchcmd{\@starttoc}{\chapter*{\contentsname}}{%
+  \vspace*{0.5cm} % Adjust this to control vertical spacing
+  \chapter*{\contentsname}
+}{}{}
+\makeatother
+
+
+
+% ------------------- Document Start -------------------
+\begin{document}
+% ------------------- Cover Page -------------------
+\begin{titlepage}
+\newpage
+\thispagestyle{empty}
+
+% Top "श्री हरि" with vertical lines
+\vspace*{0.5cm}
+\begin{center}
+    \fontsize{20pt}{20pt}\selectfont
+    \bfseries
+   \hspace{0.1cm}॥ श्री हरि: ॥\hspace{0.1cm}
+\end{center}
+
+% Title in large font
+\vspace{1cm}
+\begin{center}
+    \fontsize{42pt}{42pt}\selectfont
+    \bfseries
+  श्रीमद्भगवत् गीता रागमाला
+\end{center}
+
+% Centered Verse with thick lines
+\vfill
+
+% Center the top thick rule
+\begin{center}
+  \rule{0.45\linewidth}{5pt}  % Top thick line, 50% width
+\end{center}
+
+\vspace{-0.5cm}
+
+% Center a minipage with fixed width (same as line width)
+\begin{center}
+  \begin{minipage}{0.47\linewidth}
+    \fontsize{24pt}{24pt}\selectfont % 42pt font, 44pt line height
+    \bfseries
+    \setlength{\parindent}{2pt}
+    % Justify lines with \\ for line breaks
+    त्वमेव माता च पिता त्वमेव\\
+    त्वमेव \hspace*{0.0050cm}बन्धुश्च\hspace*{0.0050cm} सखा \hspace*{0.010cm}त्वमेव ।\\
+    त्वमेव  विद्या द्रविणं त्वमेव
+    त्वमेव \hspace*{0.30cm} सर्वं \hspace*{0.25cm} मम देवदेव ॥
+  \end{minipage}
+\end{center}
+
+\vspace{-0.5cm}
+
+% Bottom thick line same width
+\begin{center}
+  \rule{0.45\linewidth}{5pt}
+\end{center}
+
+\vfill
+
+% Bottom Writer Info
+\begin{center}
+    \fontsize{24pt}{24pt}\selectfont
+   सङ्कलनकर्ता~:~\textbf{.................}
+\end{center}
+\end{titlepage}
+
+% ------------------- Writer Information -------------------
+\vspace*{0.5cm}
+\begin{center}
+    \fontsize{20pt}{20pt}\selectfont
+    \bfseries
+   \hspace{0.1cm}॥ श्री हरि: ॥\hspace{0.1cm}
+\end{center}
+\section*{सङ्कलक को तर्फबाट}
+\vspace{0cm}
+\noindent{\fontsize{22pt}{22pt}\selectfont
+\begin{center}
+\textbf{
+...........................................
+}
+\end{center}
+......................................
+\\
+......................................
+}%
+\vspace{0.5cm}
+
+
+\vspace*{0.5cm}
+\begin{center}
+    \fontsize{20pt}{20pt}\selectfont
+    \bfseries
+   \hspace{0.1cm}॥ श्री हरि: ॥\hspace{0.1cm}
+\end{center}
+\section*{अथ बिम्व बस्ने विधिहरू}
+\vspace{0cm}
+\noindent{\fontsize{22pt}{22pt}\selectfont
+
+ अन्तिममा नौ रत्न को फेद टुप्पो पढेर गीता महात्म्य पुष्पाञ्जलि गरेर उत्तरांग पंच आह्वान गरेर समाप्त हुन्छ। 
+ यस्ता विम्व बस्दा दशमी, द्वादशी त्रयोदशी तिथिमा उठ्ने‌गरि थाल्नु पर्छ । अरु एक राते बिम्व बस्दा खेरी साईत हेर्न पर्दैन । 
+ साथै मंगलबारे बिम्व बस्नलाई हरि सयनी एकादशी पाठ फिराएपछि को पहिलो मंगलबार बाट थाल्नु पर्छ यसमा कुनै साइत हेर्न पर्दैन । 
+ त्यसपछि मंगलबारे बिम्व बस्नलाई मंगलचौथि बाट बिम्व थाल्नु पर्छ । कसैले अठार मंगलबारको संकल्पगरेर थाल्छन् भने कसैले आठ मंगलबार मात्र बस्ने गरि थाल्छन् । 
+ अरु चाडपर्व हरुमा पनि बिम्व बस्नु पर्छ, जस्तै श्री कृष्ण जन्माष्टमी, बाला चतुर्दशी, शिव रात्री, राम नवमी यस्तै यस्तै बेलामा बिम्व बसिन्छ । 
+ बिम्व बस्नु भनेको भगवान ईश्वर को चर्चागर्नु सत्संग गर्नु आत्मा परमात्मा को खोजि गर्नु  ज्ञान हितोपदेशका कुरा गर्नु शास्त्रार्थ काकुरा गर्नु शान्ति र आनन्द रहनुनै मूख्य उद्देश्य हो ।
+\vspace{0.5cm}
+\begin{center}\HUGE
+ \textbf{ईतिश्री ॥\\}
+\end{center}
+\newpage
+
+% ------------------- Table of Contents -------------------
+\tableofcontents
+\newpage
+
+% ------------- Full A4 Back Cover (No Margin, No Shift) -------------
+\newpage
+\thispagestyle{empty} % Removes header and footer
+\begin{tikzpicture}[remember picture, overlay]
+    \node at (current page.center) {
+        \includegraphics[
+            width=\dimexpr\paperwidth-3cm\relax,
+            height=\dimexpr\paperheight-3cm\relax
+        ]{SLOKAS/front-images/15.png}
+    };
+\end{tikzpicture}
+\newpage
+
+\thispagestyle{empty} % Removes header and footer
+\begin{tikzpicture}[remember picture, overlay]
+    \node at (current page.center) {
+        \includegraphics[
+            width=\dimexpr\paperwidth-3cm\relax,
+            height=\dimexpr\paperheight-3cm\relax
+        ]{SLOKAS/front-images/16.png}
+    };
+\end{tikzpicture}
+\newpage
+
+\thispagestyle{empty} % Removes header and footer
+\begin{tikzpicture}[remember picture, overlay]
+    \node at (current page.center) {
+        \includegraphics[
+            width=\dimexpr\paperwidth-3cm\relax,
+            height=\dimexpr\paperheight-3cm\relax
+        ]{SLOKAS/front-images/17.png}
+    };
+\end{tikzpicture}
+\newpage
+\thispagestyle{empty} % Removes header and footer
+\begin{tikzpicture}[remember picture, overlay]
+    \node at (current page.center) {
+        \includegraphics[
+            width=\dimexpr\paperwidth-3cm\relax,
+            height=\dimexpr\paperheight-3cm\relax
+        ]{SLOKAS/front-images/18.png}
+    };
+\end{tikzpicture}
+\newpage
+\thispagestyle{empty} % Removes header and footer
+\begin{tikzpicture}[remember picture, overlay]
+    \node at (current page.center) {
+        \includegraphics[
+            width=\dimexpr\paperwidth-3cm\relax,
+            height=\dimexpr\paperheight-3cm\relax
+        ]{SLOKAS/front-images/19.png}
+    };
+\end{tikzpicture}
+\newpage
+% ------------------- Song Pages -------------------
+% ------------------- Song Pages -------------------
+\renewcommand{\songtitle}{अथ मङ्गलाचरण प्रारम्भ}
+\section{अथ मङ्गलाचरण प्रारम्भ}
+\begin{songtextblock}
+\begin{justifylines}
+ॐ गुरु श्रीमन नारायणाय नमः ।\\
+ॐ तत्सत श्रिगुरु चरणम शरणम् नमोनम: ।\\
+ॐअविरल मदजल निबहं  भ्रमरकुलाने
+  कस्यवित कपोलं‌ ।\\ 
+  अभिमत फल दाताराम
+कामेशं गुरु गणपतिबन्धे ।\\
+
+\end{justifylines}
+ 
+\begin{center}\Large
+   इति श्रीदेवस्तुतिः
+  मङ्गलाचरणसमाप्तम् ॥\\
+\end{center}
+
+
+\end{songtextblock}
+\newpage
+% ------------------ Image Insertion Block ------------------
+\begin{center}
+  \includegraphics[width=0.70\paperwidth]{A3-1.png}
+\end{center}
+\vspace{-1cm}
+% ------------------ Image Insertion Block ------------------
+\vspace{1em} % optional spacing above the image
+\begin{center}
+  \includegraphics[width=0.70\paperwidth]{A1.png}
+\end{center}
+\vspace{1em} % optional spacing below the image
+\newpage
+
+\renewcommand{\songtitle}{अथ गणेश स्तुति}
+\section{अथ गणेश स्तुति}
+
+\begin{songtextblock}
+हरि गुरु सिद्धिका कारणजोराभक्तिका
+  मञ्चोरा ।\\
+  विघ्नका बञ्चोरा पार्वतीका छोरा ॥\\
+  हातमा लड्डुकेराजस्का छन उमेरा ।\\
+  विघ्नको नाशगरून् ढोग्दिया सातफेरा ॥\\
+
+
+\begin{center}
+\begin{minipage}[c]{0.80\textwidth} % Text on the left
+\Large
+इति श्री सत्य सीताजी रामगिरी गणेश स्तुति रागमाला संक्षेप वरणं ।\\
+  पापहरणं मोक्षदाता जनार्दन शुभम्  ॥
+\end{minipage}%
+\hfill
+\begin{minipage}[c]{0.2\textwidth} % Image on the right
+\includegraphics[width=\linewidth]{3.png}
+\end{minipage}
+\end{center}
+
+
+
+
+\end{songtextblock}
+
+
+
+\newpage
+\renewcommand{\songtitle}{अथ तिसा यन्त्र रागमाला}
+\section{अथ तिसा यन्त्र रागमाला}
+
+\begin{songtextblock}
+\begin{justifylines}
+   हरि गुरु  अहे ग्रामकि त्रास भयारभलै मलयाचल वासी प्रवास लियो ०२॥\\ 
+  तन ताप मेटाउन आसचलो तहिनाचल जाईन, होई जियो ॥\\ 
+ल खौफुले रसालकि मौलिपमौल होवै मो दित कोकिल कुककियो ।\\
+  तीनकि कलकोमल मन्द महा मधुरीधुनि वाणीमै कान दियो ०२॥\\ 
+  \\
+  हरि गुरु  मेहतिब्याकुल गोकुलकेलखौगोकुल गोपि ग्वाला पियारे ।\\
+बाहा उठाई सहायके हेतु उचाई धरो गिरिनन्द दुलारे ।\\
+सानन्द गोपसुता सब होई भुजा चमकै अंगराग छिनारे ।\\
+सोभुज मुल करौं अनुकूल हरौ‌‌ भव केसबसुलतिहारे ।\\
+मेहतिब्याकुल गोकुलकेलखौगोकुल गोपि ग्वाला पियारे ।\\
+
+
+\end{justifylines}
+ 
+%\end{justifylines}
+%this is image section 
+%.......................................
+%.........................................
+\begin{center}
+\begin{minipage}[c]{0.80\textwidth} % Text on the left
+\Large
+  इति श्री सत्य सीताजि रामगिरी पैलानम्बर बाललिला कबित रागमाला संक्षेप वरणं ।\\
+       पापहरणं मोक्षेदाता जनार्दन शुभं ! मधुरबाणि धुनि दिर्घ उच्चारणं समाप्त ॥
+\end{minipage}%
+\hfill
+\begin{minipage}[c]{0.2\textwidth} % Image on the right
+\includegraphics[width=\linewidth]{3.png}
+\end{minipage}
+\end{center} 
+\end{songtextblock}
+
+\restoregeometry % go back to normal margins
+
+
+\newpage
+\renewcommand{\songtitle}{अथ द्रोण स्तुति भाषा श्लोक }
+\section{अथ द्रोण स्तुति भाषा श्लोक}
+
+\begin{songtextblock}
+\begin{justifylines}
+    
+हरि गुरु  निरञ्जनं निराकारं निराधारं निरामय शरणंसार गुरु महाराज ।\\
+गुरुं महाराजं हरी गुरुं महाराज ०२॥\\ 
+निरञ्जनं निराकारं निराधारं निरामय शरणंसार गुरु महाराज ।\\
+गुरुं महाराजं हरी गुरुं महाराज ०२॥ मनमधिराज अधिराज ।\\
+हरि गुरु रातदिन श्रीप्रभूका कमल चरणको ध्यान गर्नु मनले पनि ।\\
+व्यर्थैकाबकबात छोडी हरिको नाम भज्नु ठुलो भनि ॥\\ 
+नामले तर्छ जगत्, सवैत दुनिया यज्ञादिकोहि जहा ।\\
+\\
+
+\end{justifylines}
+
+\begin{center}
+    
+\begin{tikzpicture}
+    % Image node
+    \node[inner sep=0pt] (img) at (0,0) {\includegraphics[width=0.7\paperwidth]{f.png}};
+    
+    % Overlay text node, centered and moved 1cm up
+    \node at ($(img.center) + (0,3.5cm)$) [text width=0.7\paperwidth, align=center] {\Large\color{black}
+       इति श्री सत्य सीताजि रामगिरी श्रीमन् महाभारते द्रोण पर्व, द्रोण स्तुति रागमाला संक्षेप वरणं ।\\
+       पापहरणं मोक्षेदाता जनार्दन शुभं ! मधुरबाणि धुनि दिर्घ उच्चारणं समाप्त ॥
+    };
+\end{tikzpicture}
+
+\end{center}
+
+\end{songtextblock}
+
+
+\newpage
+\section*{श्रीमद्भगवत गीता को रहस्य}
+
+\subsection*{श्लोक संख्या}
+\fontsize{20pt}{18pt}\selectfont
+% your content here
+% your content here
+
+
+
+
+
+
+\begin{itemize}
+    \item श्रीमद्भगवत गीतामा जम्मा \textbf{७०४ श्लोक} छन्।
+    \item बजारमा आएका सबै पुस्तकमा \textbf{७०० श्लोक} मात्रै हुन्छन्।
+    \item तर गीता गुरुमुखि वा सम्प्रदायिक गीता पाठमा \textbf{७०४ श्लोक} पाइन्छन्।
+\end{itemize}
+
+\vspace{0.5em}
+\subsection*{अतिरिक्त चार श्लोक}
+
+
+\begin{verse}
+\textbf{१. अध्याय ३, श्लोक ४३:} \\
+स्वधर्मेण यमाराध्य भक्तामुक्तिमिताबुधाः।\\
+त्वं कृष्ण परमानन्दं तोषयत्सर्वकर्मभिः॥ \\
+
+\textbf{२. अध्याय १०, श्लोक ३९:} \\
+औषधीनां यवश्चास्मि धातूनामस्मि काञ्चनम्।\\
+सर्वेषां स्त्रीणां जातीनां दारुओऽहं पाण्डुनन्दन॥ \\
+
+\textbf{३. अध्याय ११, श्लोक ४५:} \\
+ईमानि कर्माणि तवाद्भुतानि कृतानि पूर्वे मुनयो वदन्ति।\\
+न ते गुणानां परिमा नमस्ते न तेजसा चास्मि बलस्य विष्णो॥ \\
+
+\textbf{४. अध्याय १३, श्लोक १:} \\
+प्रकृतिं पुरुषं चैव क्षेत्रं क्षेत्रज्ञमेव च।\\
+एतद्वेदितुमिच्छामि ज्ञानं ज्ञेयं च केशव॥
+\end{verse}
+
+\vspace{0.5em}
+{\fontsize{16pt}{20pt}\selectfont\bfseries श्लोक रचना जानकारी\par}
+\vspace{0.5em}
+\begin{itemize}
+    \item श्लोकहरू \textbf{अनुष्टुप् छन्द} मा छन्। प्रत्येक श्लोकमा आठ–आठ अक्षरको विश्राम।
+    \item कुल अक्षर संख्या: \textbf{२३,१९९}।
+    \item \textbf{‘झ’} को अक्षर जम्मा \textbf{१ पटक} — अध्याय १०, श्लोक ३१ मा।
+    \item \textbf{‘स’} नपरेका श्लोकहरू: \textbf{५ वटा}।
+\end{itemize}
+
+\vspace{0.5em}
+\subsection*{‘स’ नभएका ५ श्लोक}
+
+\begin{verse}
+\textbf{१. अध्याय २, श्लोक २८:} \\
+अव्यक्तादीनि भूतानि व्यक्तमध्यानि भारत।\\
+अव्यक्तनिधनान्येव तत्र का परिदेवना॥ \\
+
+\textbf{२. अध्याय ४, श्लोक २९:} \\
+अपाने जुह्वति प्राणं प्राणे पानं तथापरे।\\
+प्राणापानगति रुद्ध्वा प्राणायामपरायणाः॥ \\
+
+\textbf{३. अध्याय ७, श्लोक २४:} \\
+अव्यक्तं व्यक्तिमापन्नं मन्यन्ते मामबुद्धयः।\\
+परं भावमजानन्तो ममाव्ययमनुत्तमम्॥ \\
+
+\textbf{४. अध्याय ८, श्लोक १६:} \\
+आ ब्रह्मभुवनालोकाः पुनरावर्तिनोऽर्जुन।\\
+मामुपेत्य तु कौन्तेय पुनर्जन्म न विद्यते॥ \\
+
+\textbf{५. अध्याय ९, श्लोक २५:} \\
+यान्ति देवव्रता देवान्पितॄन्यान्ति पितृव्रताः।\\
+भूतानि यान्ति भूतेज्या यान्ति मद्याजिनोऽपि माम्॥
+\end{verse}
+
+\vspace{0.5em}
+\subsection*{बाचा विवरण}
+\begin{itemize}
+    \item \textbf{भगवानु वाच}: ५७७ श्लोक
+    \item \textbf{अर्जुन उवाच}: ८६ श्लोक
+    \item \textbf{सञ्जय उवाच}: ४० श्लोक
+    \item \textbf{धृतराष्ट्र उवाच}: १ श्लोक
+    \item \textbf{जम्मा}: ७०४ श्लोक
+\end{itemize}
+
+\vspace{1em}
+\subsection*{श्रीकृष्णका पुर्खाहरूको नाम}
+
+\begin{multicols}{3}
+\begin{enumerate}
+\item ययाति
+\item सान्तसेन
+\item सन्तसेन
+\end{enumerate}
+\end{multicols}
+}
+
+% ------------- Full A4 Back Cover (No Margin, No Shift) -------------
+\newpage
+\thispagestyle{empty} % Removes header and footer
+\begin{tikzpicture}[remember picture, overlay]
+    \node at (current page.center) {
+        \includegraphics[width=\paperwidth,height=\paperheight]{BACK-WITH-AMA.png}
+    };
+\end{tikzpicture}
+\end{document}
